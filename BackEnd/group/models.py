@@ -10,3 +10,11 @@ class Chat(models.Model):
 
     def __str__(self):
         return f"Chat {self.id} created at {self.created_at}"
+    
+
+class Message(models.Model):
+    chat_id = models.IntegerField()
+    receiver =models.IntegerField()
+    sender = models.IntegerField()
+    content = models.CharField(max_length = 100)
+    created_at = models.DateTimeField(auto_now_add=True) 
