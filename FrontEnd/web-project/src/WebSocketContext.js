@@ -1,18 +1,23 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useWebSocket, { ReadyState } from 'use-websocket';
 
-const WebSocketContext = createContext();
+const WebSocketContext = React.createContext();
 
 export const useWebSocketContext = () => {
-  return useContext(WebSocketContext);
+  return React.useContext(WebSocketContext);
 };
 
 export const WebSocketProvider = ({ children }) => {
-  const [socketUrl] = useState('ws://localhost:8000/socket');
+  const [socketUrl, setSocketUrl] = useState('ws://localhost:8000/socket');
   const { sendJsonMessage, readyState } = useWebSocket(socketUrl);
 
   const sendMessage = (message) => {
     sendJsonMessage(message);
+  };
+
+  const handleUrlChange = (newUrl) => {
+    // Update the WebSocket URL
+    setSocketUrl(newUrl);
   };
 
   useEffect(() => {
@@ -24,7 +29,7 @@ export const WebSocketProvider = ({ children }) => {
   }, [readyState]);
 
   return (
-    <WebSocketContext.Provider value={{ sendMessage }}>
+    <WebSocketContext.Provider value={{ sendMessage, handleUrlChange }}>
       {children}
     </WebSocketContext.Provider>
   );
