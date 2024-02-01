@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import useWebSocket, { ReadyState } from 'use-websocket';
+import useWebSocket, { ReadyState } from 'react-use-websocket';
 
 const WebSocketContext = React.createContext();
 
