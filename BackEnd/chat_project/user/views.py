@@ -37,7 +37,13 @@ class SignupView(APIView):
                 "content":encrypted_token,
                 "expired_time":  int(time.time() / 60) + 240
             }
-            return Response(token, status=status.HTTP_201_CREATED)
+            ser2 = TokenSerializer(data=token)
+            if ser2.is_valid():
+                ser2.save()
+                return Response(token, status=status.HTTP_201_CREATED)
+            else:
+                print(ser2.errors)
+                return Response({"message":f"{ser2.errors}"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
