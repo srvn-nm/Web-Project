@@ -2,7 +2,7 @@ from django.db import models
 from user.models import User
 
 # Create your models here.
-
+'''
 class Chat(models.Model):
     people = models.ManyToManyField(User, related_name='chats')
     # Using DateTimeField to automatically set this field to now
@@ -18,3 +18,4 @@ class Message(models.Model):
     sender = models.IntegerField()
     content = models.CharField(max_length = 100)
     created_at = models.DateTimeField(auto_now_add=True) 
+'''
