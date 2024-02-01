@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class User(models.Model):
-    identifier = models.IntegerField() 
+    user_id = models.IntegerField() 
     lastname = models.CharField(max_length = 200)
     username = models.CharField(max_length = 200, unique = True)
     firstname = models.CharField(max_length = 200)
@@ -12,5 +12,12 @@ class User(models.Model):
     password = models.CharField(max_length = 100)
     bio = models.CharField(max_length = 200)
 
+    #privacy
+
     def __str__(self) -> str:
         return self.name
+
+class Contacts(models.Model):
+    contact_id =  models.IntegerField() 
+    user_id = models.IntegerField() 
+    people = models.ManyToManyField(User, related_name='Contacts')
