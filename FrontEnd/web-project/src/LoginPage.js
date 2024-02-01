@@ -11,11 +11,27 @@ const LoginPage = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    // ارسال درخواست لاگین به سرور
-    // دریافت توکن JWT
-    // انتقال به صفحه چت
-  };
+  e.preventDefault();
+  try {
+    const response = await fetch('http://localhost:8000/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
+      // لاگین موفقیت‌آمیز
+      // دریافت توکن JWT و ادامه به صفحه چت
+    } else {
+      // خطا در لاگین
+      // نمایش پیغام خطا به کاربر
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
 
   return (
     <div>
