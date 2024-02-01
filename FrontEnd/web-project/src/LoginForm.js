@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './FormStyles.css';
 
 const LoginForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -17,7 +18,7 @@ const LoginForm = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="form-container" onSubmit={handleSubmit}>
       <label>
         Username:
         <input

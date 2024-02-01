@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './FormStyles.css';
 
 const RegistrationForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -22,7 +23,7 @@ const RegistrationForm = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="form-container" onSubmit={handleSubmit}>
       <label>
         First Name:
         <input
