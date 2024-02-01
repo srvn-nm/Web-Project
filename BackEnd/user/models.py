@@ -13,6 +13,10 @@ class User(models.Model):
     bio = models.CharField(max_length = 200)
 
     #privacy
+    phone_private = models.BooleanField()
+    image_private = models.BooleanField()
+    bio_private = models.BooleanField()
+
 
     def __str__(self) -> str:
         return self.name
