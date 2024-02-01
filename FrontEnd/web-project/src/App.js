@@ -1,12 +1,17 @@
-// App.js
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import RegisterPage from './RegisterPage';
 import LoginPage from './LoginPage';
 import ChatPage from './ChatPage';
 import { WebSocketProvider } from './WebSocketContext';
 
 const App = () => {
+  const [userData, setUserData] = useState(null);
+
+  const handleUserDataChange = (data) => {
+    setUserData(data);
+  };
+
   return (
     <Router>
       <WebSocketProvider>
@@ -25,11 +30,13 @@ const App = () => {
             </ul>
           </nav>
 
-          <Switch>
-            <Route path="/register" component={RegisterPage} />
-            <Route path="/login" component={LoginPage} />
-            <Route path="/chat" component={ChatPage} />
-          </Switch>
+          <Routes>
+            <Route exact path='/register' element={<RegisterPage onUserDataChange={handleUserDataChange}/>}/>
+            
+            <Route exact path='/login' element={<LoginPage onUserDataChange={handleUserDataChange}/>}/>
+
+            <Route exact path='/chat' element={<ChatPage userData={userData}/>}/>
+          </Routes>
         </div>
       </WebSocketProvider>
     </Router>
