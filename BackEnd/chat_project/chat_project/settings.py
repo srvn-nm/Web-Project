@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -55,6 +56,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "chat_project.urls"
 
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -71,6 +73,8 @@ TEMPLATES = [
     },
 ]
 
+# Set the Channels ASGI application
+ASGI_APPLICATION = 'your_project.asgi.application'
 WSGI_APPLICATION = "chat_project.wsgi.application"
 
 
