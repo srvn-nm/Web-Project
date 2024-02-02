@@ -204,3 +204,21 @@ class UserContactsView(APIView):
                     return Response({"message":f"not authorized, token is invalid or expired"},status=status.HTTP_401_UNAUTHORIZED)
         else:
              return Response({"message":"no user with this username ..."},status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, user_id):
+        user = self.is_exist(user_id) 
+        if user:
+            token = request.headers.get('token')
+            is_valid = token_validator(token=str(token))
+            if is_valid:
+                contact_data = request.data
+                contact_data['user_id'] = user_id
+                serializer = UserContactsSerializer(data=contact_data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({"message": "Not authorized, token is invalid or expired"}, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response({"message": "No user with this username"}, status=status.HTTP_404_NOT_FOUND)
