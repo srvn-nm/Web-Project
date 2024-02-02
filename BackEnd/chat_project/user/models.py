@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 class User(models.Model):
+
     username = models.CharField(max_length = 200, unique = True)
     firstname = models.CharField(max_length = 200)
     lastname = models.CharField(max_length = 200)
@@ -14,6 +15,11 @@ class User(models.Model):
     phone_private = models.BooleanField()
     image_private = models.BooleanField()
     bio_private = models.BooleanField()
+
+class UserContacts(models.Model):
+    contact_id =  models.CharField(max_length = 200)
+    user_id = models.CharField(max_length = 200)
+    people = models.CharField(max_length = 200)
 
 class Contacts(models.Model):
     contact_id =  models.IntegerField() 
