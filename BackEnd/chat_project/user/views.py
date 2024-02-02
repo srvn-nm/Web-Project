@@ -22,15 +22,16 @@ def encrypt(plaintext):
 
     return encrypted_text
 
-def token_validator(token,expired_time):
+def token_validator(token):
         try:
             queryset = Token.objects.get(content = token)
-            if expired_time > int(time.time() / 60):
-                return True , True
+           
+            if  queryset.expired_time > int(time.time() / 60):
+                return True 
             else:
-                return True , False
-        except User.DoesNotExist:
-            False , False
+                return False 
+        except Token.DoesNotExist:
+            False
 
 class SignupView(APIView):
     def post(self, request):
@@ -97,20 +98,36 @@ class UserView(APIView):
         except User.DoesNotExist:
             pass
 
-    def get(self, request,username):
+    def get(self, request,user_id):
         
        
-        user = self.is_exist(username)
+        user = self.is_exist(user_id)
         if user :
-            token = request.data.get('content')
-            expired_time = request.data.get('expired_time')
-            is_valid , is_expired = token_validator(token=token,expired_time=expired_time)
+            token = request.headers.get('token')
+           
+            is_valid  = token_validator(token=str(token))
             if is_valid :
-                if not is_expired:
-                    return Response(token,status=status.HTTP_200_OK)
-                else:
-                    return Response({"message":f"not authorized, token is invalid or expired"},status=status.HTTP_401_UNAUTHORIZED)
+                    user_data = UserSerializer(user).data
+                    return Response(user_data, status=status.HTTP_200_OK)
             else:
                     return Response({"message":f"not authorized, token is invalid or expired"},status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response({"message":"no user with this username ..."},status=status.HTTP_404_NOT_FOUND)
+    def patch(self, request,user_id):
+        
+       
+        user = self.is_exist(user_id)
+        if user :
+            token = request.headers.get('token')
+            
+           
+            is_valid  = token_validator(token=str(token))
+            if is_valid :
+                    serializer = UserSerializer(user, data=request.data, partial=True)
+                    if serializer.is_valid():
+                        serializer.save()
+                        return Response(serializer.data, status=status.HTTP_200_OK)
+                    else:
+                        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"message":"no user with this username ..."},status=status.HTTP_404_NOT_FOUND)
