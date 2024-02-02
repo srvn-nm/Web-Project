@@ -42,7 +42,10 @@ INSTALLED_APPS = [
     "user",
     "group",
     "chat",
+    'django_log_tracker'
 ]
+
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -52,6 +55,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'django_log_tracker.middleware.log_tracker_middleware.LogTrackerMiddleware'
 ]
 
 ROOT_URLCONF = "chat_project.urls"
