@@ -16,7 +16,6 @@ def encrypt(plaintext):
 
     key = padding_function(bytes("11273876132871563675428757125", 'utf-8'))
     cipher = AES.new(key, AES.MODE_ECB)
-
     padded_text = padding_function(plaintext.encode('utf-8'))
     ciphered_text = cipher.encrypt(padded_text)
     encrypted_text = base64.b64encode(ciphered_text).decode()
@@ -36,6 +35,7 @@ def token_validator(token):
 
 class SignupView(APIView):
     def post(self, request):
+      if len(request.data.get('password')) > 8:
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
@@ -57,7 +57,8 @@ class SignupView(APIView):
                 print(ser2.errors)
                 return Response({"message":f"{ser2.errors}"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+      else: 
+          return Response({"message":"len of password is not enough"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 class LoginView(APIView):
 
     def is_exist(self , username,password):

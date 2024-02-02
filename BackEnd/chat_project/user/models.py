@@ -9,7 +9,7 @@ class User(models.Model):
     phone = models.CharField(max_length = 40, unique = True)
     image = models.CharField(max_length = 350, unique = True)
     password = models.CharField(max_length = 200)
-    bio = models.CharField(max_length = 200)
+    bio = models.CharField(max_length = 100)
 
     #privacy
     phone_private = models.BooleanField()
