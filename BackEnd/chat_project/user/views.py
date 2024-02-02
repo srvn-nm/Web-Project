@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import Q
-from .models import User, Token
-from .serializers import UserSerializer,TokenSerializer
+from .models import User, Token, UserContacts
+from .serializers import UserSerializer,TokenSerializer, UserContactsSerializer
 from Crypto.Cipher import AES
 import base64
 
@@ -140,7 +140,8 @@ class UserView(APIView):
                 if is_valid :
                         user.delete()
                         return Response({"message": "User deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
-
+                else:
+                    return Response({"message":f"not authorized, token is invalid or expired"},status=status.HTTP_401_UNAUTHORIZED)
             else:
                 return Response({"message":"no user with this username ..."},status=status.HTTP_404_NOT_FOUND)
            
@@ -160,3 +161,46 @@ class UserSearchView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
             return Response({"message":"no user with this info ..."}, status=status.HTTP_404_NOT_FOUND)
+
+          
+class UserContactsView(APIView):   
+    def is_exist(self , username):
+        try:
+            queryset = User.objects.get(username = username)
+            return queryset
+        except User.DoesNotExist:
+            pass
+
+    def is_contact_exist(self , username):
+        try:
+            queryset = UserContacts.objects.all()
+            contacts = []
+            for item in queryset:
+                if item.user_id == username:
+                    contacts.append(item)
+            if len(contacts) != 0:
+                return contacts
+            else :
+                pass
+        except UserContacts.DoesNotExist:
+            pass
+
+    def get(self, request,user_id):
+        
+        user = self.is_exist(user_id)
+        if user :
+            token = request.headers.get('token')
+            is_valid  = token_validator(token=str(token))
+            if is_valid:
+                userContacts = self.is_contact_exist( user_id)
+                if userContacts:
+                    serializer = UserContactsSerializer(userContacts, many=True)
+                    
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+                    
+                else:
+                     return Response({"message":"no contact for this user with this username ..."},status=status.HTTP_404_NOT_FOUND)
+            else:
+                    return Response({"message":f"not authorized, token is invalid or expired"},status=status.HTTP_401_UNAUTHORIZED)
+        else:
+             return Response({"message":"no user with this username ..."},status=status.HTTP_404_NOT_FOUND)
