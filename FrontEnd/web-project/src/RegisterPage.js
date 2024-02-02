@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import RegistrationForm from './RegistrationForm';
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
   const [formData] = useState({
@@ -46,14 +46,18 @@ const RegisterPage = () => {
     }
   };
 
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate("/login", { replace: true });
+  };
+
   return (
     <div>
       <h2>Register</h2>
       {/* Registration Form */}
       <RegistrationForm onSubmit={handleSubmit} />
-      <Link to="/login">
-        <button>Already have an account? LogIn</button>
-      </Link>
+      <button onClick={handleNavigate}>Already have an account? LogIn</button>
     </div>
   );
 };
