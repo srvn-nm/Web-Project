@@ -113,9 +113,8 @@ class UserView(APIView):
                     return Response({"message":f"not authorized, token is invalid or expired"},status=status.HTTP_401_UNAUTHORIZED)
         else:
             return Response({"message":"no user with this username ..."},status=status.HTTP_404_NOT_FOUND)
-    def patch(self, request,user_id):
         
-       
+    def patch(self, request,user_id):
         user = self.is_exist(user_id)
         if user :
             token = request.headers.get('token')
@@ -131,3 +130,18 @@ class UserView(APIView):
                         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"message":"no user with this username ..."},status=status.HTTP_404_NOT_FOUND)
+        
+    def delete(self, request, user_id):
+            user = self.is_exist(user_id)
+            if user :
+                token = request.headers.get('token')
+            
+           
+                is_valid  = token_validator(token=str(token))
+                if is_valid :
+                        user.delete()
+                        return Response({"message": "User deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+
+            else:
+                return Response({"message":"no user with this username ..."},status=status.HTTP_404_NOT_FOUND)
+           
