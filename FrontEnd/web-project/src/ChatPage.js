@@ -18,7 +18,7 @@ const ChatPage = ({ userId }) => {
   const fetchUserProfile = useCallback(async () => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/users/${userId}`,
+        `http://127.0.0.1:8000/api/users/${userId}`,
         {
           headers: {
             Token: localStorage.getItem("jwtToken").toString(),
@@ -41,7 +41,7 @@ const ChatPage = ({ userId }) => {
   // Fetch user chat list
   const fetchUserChatList = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/chats", {
+      const response = await fetch("http://127.0.0.1:8000/api/chats", {
         headers: {
           Token: localStorage.getItem("jwtToken").toString(),
           "Content-Type": "application/json",
