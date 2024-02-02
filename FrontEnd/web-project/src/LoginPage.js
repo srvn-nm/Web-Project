@@ -1,8 +1,7 @@
 import LoginForm from './LoginForm';
-import { useWebSocketContext } from './WebSocketContext';
+import React from 'react';
 
 const LoginPage = () => {
-  const { handleUrlChange } = useWebSocketContext();
 
   const handleLogin = async (formData) => {
     try {
@@ -25,15 +24,16 @@ const LoginPage = () => {
         localStorage.setItem('jwtToken', token);
 
         // Redirect to the chat page or any other page
-        handleUrlChange('/chat');
+        // Optionally, you can redirect from here or use react-router-dom history
+        window.location.href = '/chat';
       } else {
         // Error in login
         // Display error message to the user
         const errorData = await response.json();
-        console.error('Login Error:', errorData.message);
+        alert('Login Error: '+ errorData.message);
       }
     } catch (error) {
-      console.error('Error:', error);
+      alert('Error: '+ error);
     }
   };
 
