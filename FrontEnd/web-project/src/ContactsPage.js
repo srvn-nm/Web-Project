@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ContactList from "./ContactList";
 import AddContactModal from "./AddContactModal";
-import { fetchContacts, addContact, deleteContact } from "./api"; // به این فانکشن‌ها باید بر اساس نیازهای شما دست زد
+import { getUsersContacts, addContact, deleteContact } from "./api"; // به این فانکشن‌ها باید بر اساس نیازهای شما دست زد
 
 const ContactsPage = () => {
   const [contacts, setContacts] = useState([]);
@@ -13,10 +13,10 @@ const ContactsPage = () => {
 
   const loadContacts = async () => {
     try {
-      const contactsData = await fetchContacts();
+      const contactsData = await getUsersContacts();
       setContacts(contactsData);
     } catch (error) {
-      console.error("Error loading contacts:", error);
+      alert("Error loading contacts: "+ error);
     }
   };
 
@@ -25,7 +25,7 @@ const ContactsPage = () => {
       await addContact(newContact);
       loadContacts();
     } catch (error) {
-      console.error("Error adding contact:", error);
+      alert("Error adding contact: "+ error);
     }
   };
 
@@ -34,7 +34,7 @@ const ContactsPage = () => {
       await deleteContact(contactId);
       loadContacts();
     } catch (error) {
-      console.error("Error deleting contact:", error);
+      alert("Error deleting contact: "+ error);
     }
   };
 
