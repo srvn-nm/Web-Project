@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -41,7 +42,10 @@ INSTALLED_APPS = [
     "user",
     "group",
     "chat",
+    'django_log_tracker'
 ]
+
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -51,9 +55,11 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'django_log_tracker.middleware.log_tracker_middleware.LogTrackerMiddleware'
 ]
 
 ROOT_URLCONF = "chat_project.urls"
+
 
 TEMPLATES = [
     {
@@ -71,6 +77,8 @@ TEMPLATES = [
     },
 ]
 
+# Set the Channels ASGI application
+ASGI_APPLICATION = 'your_project.asgi.application'
 WSGI_APPLICATION = "chat_project.wsgi.application"
 
 
