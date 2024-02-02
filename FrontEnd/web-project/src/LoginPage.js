@@ -1,5 +1,7 @@
 import LoginForm from './LoginForm';
 import React from 'react';
+import { Link } from "react-router-dom";
+
 
 const LoginPage = () => {
 
@@ -42,6 +44,9 @@ const LoginPage = () => {
       <h2>Login</h2>
       {/* Login Form */}
       <LoginForm onSubmit={handleLogin} />
+      <Link to="/register">
+        <button>Don't have an account? SignUp</button>
+      </Link>
     </div>
   );
 };
