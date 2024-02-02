@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import useWebSocket, { ReadyState } from 'use-websocket';
+import useWebSocket, { ReadyState } from 'react-use-websocket';
 
 const WebSocketContext = React.createContext();
 
@@ -8,7 +8,7 @@ export const useWebSocketContext = () => {
 };
 
 export const WebSocketProvider = ({ children }) => {
-  const [socketUrl, setSocketUrl] = useState('ws://localhost:8000/socket');
+  const [socketUrl, setSocketUrl] = useState('ws://127.0.0.1:8000/socket');
   const { sendJsonMessage, readyState } = useWebSocket(socketUrl);
 
   const sendMessage = (message) => {

@@ -1,12 +1,13 @@
 import LoginForm from './LoginForm';
-import { useWebSocketContext } from './WebSocketContext';
+import React from 'react';
+import { Link } from "react-router-dom";
+
 
 const LoginPage = () => {
-  const { handleUrlChange } = useWebSocketContext();
 
   const handleLogin = async (formData) => {
     try {
-      const response = await fetch('http://localhost:8000/api/login', {
+      const response = await fetch('http://127.0.0.1:8000/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -25,15 +26,16 @@ const LoginPage = () => {
         localStorage.setItem('jwtToken', token);
 
         // Redirect to the chat page or any other page
-        handleUrlChange('/chat');
+        // Optionally, you can redirect from here or use react-router-dom history
+        window.location.href = '/chat';
       } else {
         // Error in login
         // Display error message to the user
         const errorData = await response.json();
-        console.error('Login Error:', errorData.message);
+        alert('Login Error: '+ errorData.message);
       }
     } catch (error) {
-      console.error('Error:', error);
+      alert('Error: '+ error);
     }
   };
 
@@ -42,6 +44,9 @@ const LoginPage = () => {
       <h2>Login</h2>
       {/* Login Form */}
       <LoginForm onSubmit={handleLogin} />
+      <Link to="/register">
+        <button>Don't have an account? SignUp</button>
+      </Link>
     </div>
   );
 };

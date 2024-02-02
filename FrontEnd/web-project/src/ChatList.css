@@ -1,0 +1,31 @@
+.chat-list {
+  /* Styles for the chat list container */
+}
+
+.chat-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  /* Additional styles for each chat item */
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.chat-info {
+  /* Styles for the container holding chat information */
+}
+
+.details {
+  /* Styles for the details container (name, last message, etc.) */
+}
+
+.last-message {
+  font-size: 14px;
+  color: #888;
+}

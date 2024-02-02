@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes/*, Link */} from 'react-router-dom';
 import RegisterPage from './RegisterPage';
 import LoginPage from './LoginPage';
 import ChatPage from './ChatPage';
@@ -10,13 +10,14 @@ const App = () => {
 
   const handleUserDataChange = (data) => {
     setUserData(data);
+    localStorage.setItem("userId", data);
   };
 
   return (
     <Router>
       <WebSocketProvider>
         <div>
-          <nav>
+          {/* <nav>
             <ul>
               <li>
                 <Link to="/register">Register</Link>
@@ -28,14 +29,27 @@ const App = () => {
                 <Link to="/chat">Chat</Link>
               </li>
             </ul>
-          </nav>
+          </nav> */}
+          <LoginPage onUserDataChange={handleUserDataChange} />
 
           <Routes>
-            <Route exact path='/register' element={<RegisterPage onUserDataChange={handleUserDataChange}/>}/>
-            
-            <Route exact path='/login' element={<LoginPage onUserDataChange={handleUserDataChange}/>}/>
+            <Route
+              exact
+              path="/register"
+              element={<RegisterPage onUserDataChange={handleUserDataChange} />}
+            />
 
-            <Route exact path='/chat' element={<ChatPage userData={userData}/>}/>
+            <Route
+              exact
+              path="/login"
+              element={<LoginPage onUserDataChange={handleUserDataChange} />}
+            />
+
+            <Route
+              exact
+              path="/chat"
+              element={<ChatPage userData={userData} />}
+            />
           </Routes>
         </div>
       </WebSocketProvider>
