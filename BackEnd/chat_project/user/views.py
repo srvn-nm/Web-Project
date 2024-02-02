@@ -222,3 +222,20 @@ class UserContactsView(APIView):
                 return Response({"message": "Not authorized, token is invalid or expired"}, status=status.HTTP_401_UNAUTHORIZED)
         else:
             return Response({"message": "No user with this username"}, status=status.HTTP_404_NOT_FOUND)
+    
+    def delete(self, request, user_id, contact_id):
+        user = self.is_exist(user_id)
+        if user:
+            token = request.headers.get('token')
+            is_valid = token_validator(token=str(token))
+            if is_valid:
+                try:
+                    contact = UserContacts.objects.get(contact_id=contact_id, user_id=user_id)
+                    contact.delete()
+                    return Response({"message": "Contact deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+                except UserContacts.DoesNotExist:
+                    return Response({"message": "Contact not found"}, status=status.HTTP_404_NOT_FOUND)
+            else:
+                return Response({"message": "Not authorized, token is invalid or expired"}, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response({"message": "No user with this username"}, status=status.HTTP_404_NOT_FOUND)
