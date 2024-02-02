@@ -21,7 +21,7 @@ const ChatPage = ({ userId }) => {
         `http://127.0.0.1:8000/api/users/${userId}`,
         {
           headers: {
-            Token: localStorage.getItem("jwtToken").toString(),
+            "Token": localStorage.getItem("jwtToken").toString(),
             "Content-Type": "application/json",
           },
         }
@@ -43,7 +43,7 @@ const ChatPage = ({ userId }) => {
     try {
       const response = await fetch("http://127.0.0.1:8000/api/chats", {
         headers: {
-          Token: localStorage.getItem("jwtToken").toString(),
+          "Token": localStorage.getItem("jwtToken").toString(),
           "Content-Type": "application/json",
         },
       });
