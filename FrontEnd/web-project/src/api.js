@@ -32,7 +32,7 @@ const api = {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Token: localStorage.getItem("jwtToken").toString(),
+          "Token": localStorage.getItem("jwtToken").toString(),
         },
       }
     );
