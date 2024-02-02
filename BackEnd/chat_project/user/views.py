@@ -2,6 +2,7 @@ import time
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.db.models import Q
 from .models import User, Token
 from .serializers import UserSerializer,TokenSerializer
 from Crypto.Cipher import AES
@@ -135,8 +136,6 @@ class UserView(APIView):
             user = self.is_exist(user_id)
             if user :
                 token = request.headers.get('token')
-            
-           
                 is_valid  = token_validator(token=str(token))
                 if is_valid :
                         user.delete()
@@ -145,3 +144,19 @@ class UserView(APIView):
             else:
                 return Response({"message":"no user with this username ..."},status=status.HTTP_404_NOT_FOUND)
            
+class UserSearchView(APIView):     
+    def get(self, request):
+        keyword = request.query_params.get('keyword', '')
+
+        try:
+        # Filter users based on the keyword
+            users = User.objects.filter(
+                Q(username__icontains=keyword) |
+                Q(firstname__icontains=keyword) |
+                Q(lastname__icontains=keyword)
+            )
+        
+            serializer = UserSerializer(users, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response({"message":"no user with this info ..."}, status=status.HTTP_404_NOT_FOUND)
