@@ -1,6 +1,6 @@
 import LoginForm from './LoginForm';
 import React from 'react';
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 const LoginPage = () => {
@@ -39,14 +39,19 @@ const LoginPage = () => {
     }
   };
 
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate('/register', { replace: true });
+  };
+
   return (
     <div>
       <h2>Login</h2>
       {/* Login Form */}
       <LoginForm onSubmit={handleLogin} />
-      <Link to="/register">
-        <button>Don't have an account? SignUp</button>
-      </Link>
+
+      <button onClick={handleNavigate}>Don't have an account? SignUp</button>
     </div>
   );
 };
