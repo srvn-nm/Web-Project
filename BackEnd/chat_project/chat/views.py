@@ -47,18 +47,29 @@ class ChatDetailView(APIView):
         serializer = MessageSerializer(messages, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-# Delete a specific chat by ID
-class DeleteChatView(APIView):
     def delete(self, request, chat_id):
-        chat = get_object_or_404(Chat, pk=chat_id)
-        chat.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-# Delete a specific message in a chat
+        
+        
+        token = request.headers.get('token')
+        user = request.headers.get('user')
+        is_valid = token_validator(token=str(token))
+        if is_valid:
+                try:
+                    chat = Chat.objects.get(pk=chat_id)
+                    is_in_chat = chat.people.filter(pk=user).exists()
+                    if is_in_chat:
+                        chat.delete()
+                        return Response({"message": "Chat is deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+                    else:
+                        return Response({"message": "YOU ARE NOT IN THIS CHAT"}, status=status.HTTP_400_BAD_REQUEST)
+                except Chat.DoesNotExist:
+                    return Response({"message": "Chat not found"}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({"message": "Not authorized, token is invalid or expired"}, status=status.HTTP_401_UNAUTHORIZED)
+     
 class DeleteMessageView(APIView):
     def delete(self, request, chat_id, message_id):
         message = get_object_or_404(Message, chat_id=chat_id, pk=message_id)
         message.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-# Similar views would be created for Group endpoints (CreateGroupView, DeleteGroupView, UpdateGroupView, RemoveUserFromGroupView)

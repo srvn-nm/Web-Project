@@ -161,8 +161,7 @@ class UserSearchView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
             return Response({"message":"no user with this info ..."}, status=status.HTTP_404_NOT_FOUND)
-
-          
+         
 class UserContactsView(APIView):   
     def is_exist(self , username):
         try:
