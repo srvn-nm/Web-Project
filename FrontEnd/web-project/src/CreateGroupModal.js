@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
+import api from "./groupApi";
 
 const CreateGroupModal = ({ onClose, onCreateGroup }) => {
   const [groupName, setGroupName] = useState('');
 
-  const handleCreateGroup = () => {
-    // Perform validation if needed
-    if (groupName.trim() !== '') {
-      onCreateGroup(groupName);
+  const handleCreateGroup = async () => {
+    try {
+      await api.createGroup();
       onClose();
+    } catch (error) {
+      alert("Error adding contact: " + error);
     }
   };
 
