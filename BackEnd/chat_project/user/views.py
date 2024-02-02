@@ -22,6 +22,16 @@ def encrypt(plaintext):
 
     return encrypted_text
 
+def token_validator(token,expired_time):
+        try:
+            queryset = Token.objects.get(content = token)
+            if expired_time > int(time.time() / 60):
+                return True , True
+            else:
+                return True , False
+        except User.DoesNotExist:
+            False , False
+
 class SignupView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
@@ -78,4 +88,29 @@ class LoginView(APIView):
     
     def get(self,request):
         return Response({"message":"NOT FOUND"},status=status.HTTP_404_NOT_FOUND)
+
+class UserView(APIView):     
+    def is_exist(self , username):
+        try:
+            queryset = User.objects.get(username = username)
+            return queryset
+        except User.DoesNotExist:
+            pass
+
+    def get(self, request,username):
         
+       
+        user = self.is_exist(username)
+        if user :
+            token = request.data.get('content')
+            expired_time = request.data.get('expired_time')
+            is_valid , is_expired = token_validator(token=token,expired_time=expired_time)
+            if is_valid :
+                if not is_expired:
+                    return Response(token,status=status.HTTP_200_OK)
+                else:
+                    return Response({"message":f"not authorized, token is invalid or expired"},status=status.HTTP_401_UNAUTHORIZED)
+            else:
+                    return Response({"message":f"not authorized, token is invalid or expired"},status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response({"message":"no user with this username ..."},status=status.HTTP_404_NOT_FOUND)
